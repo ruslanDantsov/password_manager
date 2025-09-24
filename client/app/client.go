@@ -42,6 +42,7 @@ func (c *ClientApp) Run(ctx context.Context) error {
 			//fmt.Scan(&login)
 			//fmt.Print("Enter password: ")
 			//fmt.Scan(&password)
+
 			// Call registration function
 			_, err := c.userClient.Register(ctx, &user.RegisterRequest{
 				Email:       "login",
