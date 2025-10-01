@@ -1,13 +1,47 @@
--- name: CreatePayment :exec
+-- name: CreateUser :one
 INSERT INTO users (
-    id,
     email,
     password_hash,
-    display_name
+    display_name,
+    salt,
+    encrypted_data_key,
+    created_at
 ) VALUES (
-    @id,
     @email,
     @password_hash,
-    @display_name
-);
+    @display_name,
+    @salt,
+    @encrypted_data_key,
+    NOW()
+) RETURNING *;
 
+-- name: GetUserByEmail :one
+SELECT * FROM users
+WHERE email = $1;
+
+-- name: GetUserByID :one
+SELECT * FROM users
+WHERE id = $1;
+
+-- name: CreateSecretData :one
+INSERT INTO secret_data (user_id, type, service_name, created_at)
+VALUES ($1, $2, $3, $4)
+    RETURNING id, user_id, type, service_name, created_at;
+
+-- name: CreateCredential :one
+INSERT INTO credentials (secret_data_id, login, password_encrypted)
+VALUES ($1, $2, $3)
+    RETURNING id, secret_data_id, login, password_encrypted;
+
+-- name: GetUserCredentials :many
+SELECT
+    sd.id,
+    sd.type,
+    sd.service_name,
+    sd.created_at,
+    c.login,
+    c.password_encrypted
+FROM secret_data sd
+         INNER JOIN credentials c ON c.secret_data_id = sd.id
+WHERE sd.user_id = $1 AND sd.type = 'credentials'
+ORDER BY sd.created_at DESC;

@@ -7,37 +7,197 @@ package repository
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
+	"time"
 )
 
-const createPayment = `-- name: CreatePayment :exec
+const createCredential = `-- name: CreateCredential :one
+INSERT INTO credentials (secret_data_id, login, password_encrypted)
+VALUES ($1, $2, $3)
+    RETURNING id, secret_data_id, login, password_encrypted
+`
+
+type CreateCredentialParams struct {
+	SecretDataID      int64
+	Login             string
+	PasswordEncrypted []byte
+}
+
+func (q *Queries) CreateCredential(ctx context.Context, arg CreateCredentialParams) (Credential, error) {
+	row := q.db.QueryRow(ctx, createCredential, arg.SecretDataID, arg.Login, arg.PasswordEncrypted)
+	var i Credential
+	err := row.Scan(
+		&i.ID,
+		&i.SecretDataID,
+		&i.Login,
+		&i.PasswordEncrypted,
+	)
+	return i, err
+}
+
+const createSecretData = `-- name: CreateSecretData :one
+INSERT INTO secret_data (user_id, type, service_name, created_at)
+VALUES ($1, $2, $3, $4)
+    RETURNING id, user_id, type, service_name, created_at
+`
+
+type CreateSecretDataParams struct {
+	UserID      int64
+	Type        string
+	ServiceName string
+	CreatedAt   time.Time
+}
+
+func (q *Queries) CreateSecretData(ctx context.Context, arg CreateSecretDataParams) (SecretDatum, error) {
+	row := q.db.QueryRow(ctx, createSecretData,
+		arg.UserID,
+		arg.Type,
+		arg.ServiceName,
+		arg.CreatedAt,
+	)
+	var i SecretDatum
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Type,
+		&i.ServiceName,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const createUser = `-- name: CreateUser :one
 INSERT INTO users (
-    id,
     email,
     password_hash,
-    display_name
+    display_name,
+    salt,
+    encrypted_data_key,
+    created_at
 ) VALUES (
     $1,
     $2,
     $3,
-    $4
-)
+    $4,
+    $5,
+    NOW()
+) RETURNING id, email, password_hash, display_name, salt, encrypted_data_key, created_at
 `
 
-type CreatePaymentParams struct {
-	ID           pgtype.UUID
-	Email        string
-	PasswordHash string
-	DisplayName  *string
+type CreateUserParams struct {
+	Email            string
+	PasswordHash     string
+	DisplayName      *string
+	Salt             []byte
+	EncryptedDataKey []byte
 }
 
-func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) error {
-	_, err := q.db.Exec(ctx, createPayment,
-		arg.ID,
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, createUser,
 		arg.Email,
 		arg.PasswordHash,
 		arg.DisplayName,
+		arg.Salt,
+		arg.EncryptedDataKey,
 	)
-	return err
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.DisplayName,
+		&i.Salt,
+		&i.EncryptedDataKey,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, email, password_hash, display_name, salt, encrypted_data_key, created_at FROM users
+WHERE email = $1
+`
+
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByEmail, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.DisplayName,
+		&i.Salt,
+		&i.EncryptedDataKey,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserByID = `-- name: GetUserByID :one
+SELECT id, email, password_hash, display_name, salt, encrypted_data_key, created_at FROM users
+WHERE id = $1
+`
+
+func (q *Queries) GetUserByID(ctx context.Context, id int64) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByID, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.DisplayName,
+		&i.Salt,
+		&i.EncryptedDataKey,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserCredentials = `-- name: GetUserCredentials :many
+SELECT
+    sd.id,
+    sd.type,
+    sd.service_name,
+    sd.created_at,
+    c.login,
+    c.password_encrypted
+FROM secret_data sd
+         INNER JOIN credentials c ON c.secret_data_id = sd.id
+WHERE sd.user_id = $1 AND sd.type = 'credentials'
+ORDER BY sd.created_at DESC
+`
+
+type GetUserCredentialsRow struct {
+	ID                int64
+	Type              string
+	ServiceName       string
+	CreatedAt         time.Time
+	Login             string
+	PasswordEncrypted []byte
+}
+
+func (q *Queries) GetUserCredentials(ctx context.Context, userID int64) ([]GetUserCredentialsRow, error) {
+	rows, err := q.db.Query(ctx, getUserCredentials, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUserCredentialsRow
+	for rows.Next() {
+		var i GetUserCredentialsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.ServiceName,
+			&i.CreatedAt,
+			&i.Login,
+			&i.PasswordEncrypted,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

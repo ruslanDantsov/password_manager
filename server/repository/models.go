@@ -6,14 +6,53 @@ package repository
 
 import (
 	"time"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type BankCard struct {
+	ID                  int64
+	SecretDataID        int64
+	CardholderName      string
+	CardNumberEncrypted string
+	ExpiryMonth         int16
+	ExpiryYear          int16
+	CvvEncrypted        string
+}
+
+type BinaryDatum struct {
+	ID            int64
+	SecretDataID  int64
+	Filename      *string
+	MimeType      *string
+	DataEncrypted []byte
+}
+
+type Credential struct {
+	ID                int64
+	SecretDataID      int64
+	Login             string
+	PasswordEncrypted []byte
+}
+
+type SecretDatum struct {
+	ID          int64
+	UserID      int64
+	Type        string
+	ServiceName string
+	CreatedAt   time.Time
+}
+
+type TextDatum struct {
+	ID               int64
+	SecretDataID     int64
+	ContentEncrypted []byte
+}
+
 type User struct {
-	ID           pgtype.UUID
-	Email        string
-	PasswordHash string
-	DisplayName  *string
-	CreatedAt    time.Time
+	ID               int64
+	Email            string
+	PasswordHash     string
+	DisplayName      *string
+	Salt             []byte
+	EncryptedDataKey []byte
+	CreatedAt        time.Time
 }

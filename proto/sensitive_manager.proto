@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package sensitivemanager.v1;
+
+option go_package = "github.com/ruslanDantsov/password_manager/pkg/sensitive;sensitive";
+
+import "google/protobuf/timestamp.proto";
+
+
+message RegisterUserRequest {
+  string email = 10;
+  string password = 20;
+  string display_name = 30;
+}
+
+message RegisterUserResponse {
+  int64 user_id = 10;
+}
+
+message LoginUserRequest {
+  string email = 10;
+  string password = 20;
+}
+
+message LoginUserResponse {
+  int64 user_id = 10;
+  string access_token = 20;
+  bytes salt = 30;
+  bytes encrypted_data_key = 40;
+}
+
+message AddCredentialDataRequest {
+  string service_name = 10;
+  string login = 20;
+  bytes password = 30;
+}
+
+message AddCredentialDataResponse {
+  int64 secret_data_id = 10;
+}
+
+message GetCredentialDataListRequest {
+
+}
+
+message CredentialData {
+  string service_name = 10;
+  string login = 20;
+  bytes password = 30;
+}
+
+message GetCredentialDataListResponse {
+  repeated CredentialData credential_data = 10;
+}
+
+service SensitiveDataService {
+  rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
+  rpc AddCredentialData(AddCredentialDataRequest) returns (AddCredentialDataResponse);
+  rpc GetCredentialDataList(GetCredentialDataListRequest) returns (GetCredentialDataListResponse);
+}

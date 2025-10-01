@@ -21,4 +21,5 @@ func main() {
 	if err := clientApp.Run(ctx); err != nil {
 		fmt.Printf("Client start failed: %v", err.Error())
 	}
+
 }
