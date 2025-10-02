@@ -490,6 +490,234 @@ func (x *GetCredentialDataListResponse) GetCredentialData() []*CredentialData {
 	return nil
 }
 
+type AddTextDataRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ServiceName   string                 `protobuf:"bytes,10,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
+	Data          []byte                 `protobuf:"bytes,20,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddTextDataRequest) Reset() {
+	*x = AddTextDataRequest{}
+	mi := &file_sensitive_manager_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddTextDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddTextDataRequest) ProtoMessage() {}
+
+func (x *AddTextDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddTextDataRequest.ProtoReflect.Descriptor instead.
+func (*AddTextDataRequest) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AddTextDataRequest) GetServiceName() string {
+	if x != nil {
+		return x.ServiceName
+	}
+	return ""
+}
+
+func (x *AddTextDataRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type AddTextDataResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SecretDataId  int64                  `protobuf:"varint,10,opt,name=secret_data_id,json=secretDataId,proto3" json:"secret_data_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddTextDataResponse) Reset() {
+	*x = AddTextDataResponse{}
+	mi := &file_sensitive_manager_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddTextDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddTextDataResponse) ProtoMessage() {}
+
+func (x *AddTextDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddTextDataResponse.ProtoReflect.Descriptor instead.
+func (*AddTextDataResponse) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AddTextDataResponse) GetSecretDataId() int64 {
+	if x != nil {
+		return x.SecretDataId
+	}
+	return 0
+}
+
+type GetTextDataListRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTextDataListRequest) Reset() {
+	*x = GetTextDataListRequest{}
+	mi := &file_sensitive_manager_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTextDataListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTextDataListRequest) ProtoMessage() {}
+
+func (x *GetTextDataListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTextDataListRequest.ProtoReflect.Descriptor instead.
+func (*GetTextDataListRequest) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{11}
+}
+
+type NoteData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ServiceName   string                 `protobuf:"bytes,10,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
+	Data          []byte                 `protobuf:"bytes,20,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NoteData) Reset() {
+	*x = NoteData{}
+	mi := &file_sensitive_manager_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NoteData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NoteData) ProtoMessage() {}
+
+func (x *NoteData) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NoteData.ProtoReflect.Descriptor instead.
+func (*NoteData) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *NoteData) GetServiceName() string {
+	if x != nil {
+		return x.ServiceName
+	}
+	return ""
+}
+
+func (x *NoteData) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type GetTextDataListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NoteData      []*NoteData            `protobuf:"bytes,10,rep,name=note_data,json=noteData,proto3" json:"note_data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTextDataListResponse) Reset() {
+	*x = GetTextDataListResponse{}
+	mi := &file_sensitive_manager_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTextDataListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTextDataListResponse) ProtoMessage() {}
+
+func (x *GetTextDataListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTextDataListResponse.ProtoReflect.Descriptor instead.
+func (*GetTextDataListResponse) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetTextDataListResponse) GetNoteData() []*NoteData {
+	if x != nil {
+		return x.NoteData
+	}
+	return nil
+}
+
 var File_sensitive_manager_proto protoreflect.FileDescriptor
 
 const file_sensitive_manager_proto_rawDesc = "" +
@@ -529,12 +757,29 @@ const file_sensitive_manager_proto_rawDesc = "" +
 	"\bpassword\x18\x1e \x01(\fR\bpassword\"m\n" +
 	"\x1dGetCredentialDataListResponse\x12L\n" +
 	"\x0fcredential_data\x18\n" +
-	" \x03(\v2#.sensitivemanager.v1.CredentialDataR\x0ecredentialData2\xcb\x03\n" +
+	" \x03(\v2#.sensitivemanager.v1.CredentialDataR\x0ecredentialData\"K\n" +
+	"\x12AddTextDataRequest\x12!\n" +
+	"\fservice_name\x18\n" +
+	" \x01(\tR\vserviceName\x12\x12\n" +
+	"\x04data\x18\x14 \x01(\fR\x04data\";\n" +
+	"\x13AddTextDataResponse\x12$\n" +
+	"\x0esecret_data_id\x18\n" +
+	" \x01(\x03R\fsecretDataId\"\x18\n" +
+	"\x16GetTextDataListRequest\"A\n" +
+	"\bNoteData\x12!\n" +
+	"\fservice_name\x18\n" +
+	" \x01(\tR\vserviceName\x12\x12\n" +
+	"\x04data\x18\x14 \x01(\fR\x04data\"U\n" +
+	"\x17GetTextDataListResponse\x12:\n" +
+	"\tnote_data\x18\n" +
+	" \x03(\v2\x1d.sensitivemanager.v1.NoteDataR\bnoteData2\x9b\x05\n" +
 	"\x14SensitiveDataService\x12c\n" +
 	"\fRegisterUser\x12(.sensitivemanager.v1.RegisterUserRequest\x1a).sensitivemanager.v1.RegisterUserResponse\x12Z\n" +
 	"\tLoginUser\x12%.sensitivemanager.v1.LoginUserRequest\x1a&.sensitivemanager.v1.LoginUserResponse\x12r\n" +
 	"\x11AddCredentialData\x12-.sensitivemanager.v1.AddCredentialDataRequest\x1a..sensitivemanager.v1.AddCredentialDataResponse\x12~\n" +
-	"\x15GetCredentialDataList\x121.sensitivemanager.v1.GetCredentialDataListRequest\x1a2.sensitivemanager.v1.GetCredentialDataListResponseBCZAgithub.com/ruslanDantsov/password_manager/pkg/sensitive;sensitiveb\x06proto3"
+	"\x15GetCredentialDataList\x121.sensitivemanager.v1.GetCredentialDataListRequest\x1a2.sensitivemanager.v1.GetCredentialDataListResponse\x12`\n" +
+	"\vAddTextData\x12'.sensitivemanager.v1.AddTextDataRequest\x1a(.sensitivemanager.v1.AddTextDataResponse\x12l\n" +
+	"\x0fGetTextDataList\x12+.sensitivemanager.v1.GetTextDataListRequest\x1a,.sensitivemanager.v1.GetTextDataListResponseBCZAgithub.com/ruslanDantsov/password_manager/pkg/sensitive;sensitiveb\x06proto3"
 
 var (
 	file_sensitive_manager_proto_rawDescOnce sync.Once
@@ -548,7 +793,7 @@ func file_sensitive_manager_proto_rawDescGZIP() []byte {
 	return file_sensitive_manager_proto_rawDescData
 }
 
-var file_sensitive_manager_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_sensitive_manager_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_sensitive_manager_proto_goTypes = []any{
 	(*RegisterUserRequest)(nil),           // 0: sensitivemanager.v1.RegisterUserRequest
 	(*RegisterUserResponse)(nil),          // 1: sensitivemanager.v1.RegisterUserResponse
@@ -559,22 +804,32 @@ var file_sensitive_manager_proto_goTypes = []any{
 	(*GetCredentialDataListRequest)(nil),  // 6: sensitivemanager.v1.GetCredentialDataListRequest
 	(*CredentialData)(nil),                // 7: sensitivemanager.v1.CredentialData
 	(*GetCredentialDataListResponse)(nil), // 8: sensitivemanager.v1.GetCredentialDataListResponse
+	(*AddTextDataRequest)(nil),            // 9: sensitivemanager.v1.AddTextDataRequest
+	(*AddTextDataResponse)(nil),           // 10: sensitivemanager.v1.AddTextDataResponse
+	(*GetTextDataListRequest)(nil),        // 11: sensitivemanager.v1.GetTextDataListRequest
+	(*NoteData)(nil),                      // 12: sensitivemanager.v1.NoteData
+	(*GetTextDataListResponse)(nil),       // 13: sensitivemanager.v1.GetTextDataListResponse
 }
 var file_sensitive_manager_proto_depIdxs = []int32{
-	7, // 0: sensitivemanager.v1.GetCredentialDataListResponse.credential_data:type_name -> sensitivemanager.v1.CredentialData
-	0, // 1: sensitivemanager.v1.SensitiveDataService.RegisterUser:input_type -> sensitivemanager.v1.RegisterUserRequest
-	2, // 2: sensitivemanager.v1.SensitiveDataService.LoginUser:input_type -> sensitivemanager.v1.LoginUserRequest
-	4, // 3: sensitivemanager.v1.SensitiveDataService.AddCredentialData:input_type -> sensitivemanager.v1.AddCredentialDataRequest
-	6, // 4: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:input_type -> sensitivemanager.v1.GetCredentialDataListRequest
-	1, // 5: sensitivemanager.v1.SensitiveDataService.RegisterUser:output_type -> sensitivemanager.v1.RegisterUserResponse
-	3, // 6: sensitivemanager.v1.SensitiveDataService.LoginUser:output_type -> sensitivemanager.v1.LoginUserResponse
-	5, // 7: sensitivemanager.v1.SensitiveDataService.AddCredentialData:output_type -> sensitivemanager.v1.AddCredentialDataResponse
-	8, // 8: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:output_type -> sensitivemanager.v1.GetCredentialDataListResponse
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	7,  // 0: sensitivemanager.v1.GetCredentialDataListResponse.credential_data:type_name -> sensitivemanager.v1.CredentialData
+	12, // 1: sensitivemanager.v1.GetTextDataListResponse.note_data:type_name -> sensitivemanager.v1.NoteData
+	0,  // 2: sensitivemanager.v1.SensitiveDataService.RegisterUser:input_type -> sensitivemanager.v1.RegisterUserRequest
+	2,  // 3: sensitivemanager.v1.SensitiveDataService.LoginUser:input_type -> sensitivemanager.v1.LoginUserRequest
+	4,  // 4: sensitivemanager.v1.SensitiveDataService.AddCredentialData:input_type -> sensitivemanager.v1.AddCredentialDataRequest
+	6,  // 5: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:input_type -> sensitivemanager.v1.GetCredentialDataListRequest
+	9,  // 6: sensitivemanager.v1.SensitiveDataService.AddTextData:input_type -> sensitivemanager.v1.AddTextDataRequest
+	11, // 7: sensitivemanager.v1.SensitiveDataService.GetTextDataList:input_type -> sensitivemanager.v1.GetTextDataListRequest
+	1,  // 8: sensitivemanager.v1.SensitiveDataService.RegisterUser:output_type -> sensitivemanager.v1.RegisterUserResponse
+	3,  // 9: sensitivemanager.v1.SensitiveDataService.LoginUser:output_type -> sensitivemanager.v1.LoginUserResponse
+	5,  // 10: sensitivemanager.v1.SensitiveDataService.AddCredentialData:output_type -> sensitivemanager.v1.AddCredentialDataResponse
+	8,  // 11: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:output_type -> sensitivemanager.v1.GetCredentialDataListResponse
+	10, // 12: sensitivemanager.v1.SensitiveDataService.AddTextData:output_type -> sensitivemanager.v1.AddTextDataResponse
+	13, // 13: sensitivemanager.v1.SensitiveDataService.GetTextDataList:output_type -> sensitivemanager.v1.GetTextDataListResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_sensitive_manager_proto_init() }
@@ -588,7 +843,7 @@ func file_sensitive_manager_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sensitive_manager_proto_rawDesc), len(file_sensitive_manager_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

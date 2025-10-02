@@ -22,6 +22,8 @@ type ClientApp struct {
 	UserLoginHandler        func(ctx context.Context, email, password string) (string, []byte, error)
 	AddCredHandler          func(ctx context.Context, serviceName, login, password, authToken string, cryptoKey []byte) error
 	GetCredListHandler      func(ctx context.Context, authToken string, cryptoKey []byte) ([]*sensitive.CredentialData, error)
+	AddNoteHandler          func(ctx context.Context, serviceName, note, authToken string, cryptoKey []byte) error
+	GetNoteListHandler      func(ctx context.Context, authToken string, cryptoKey []byte) ([]*sensitive.NoteData, error)
 }
 
 func NewClientApp(host string) (*ClientApp, error) {
@@ -38,6 +40,8 @@ func NewClientApp(host string) (*ClientApp, error) {
 		UserLoginHandler:        api.NewUserLoginHandler(sensitiveDataClient),
 		AddCredHandler:          api.NewAddCredHandler(sensitiveDataClient),
 		GetCredListHandler:      api.NewGetCredListHandler(sensitiveDataClient),
+		AddNoteHandler:          api.NewAddNoteHandler(sensitiveDataClient),
+		GetNoteListHandler:      api.NewGetNoteListHandler(sensitiveDataClient),
 	}, nil
 }
 
@@ -106,9 +110,9 @@ func mainMenu(ctx context.Context, client sensitive.SensitiveDataServiceClient, 
 
 		switch choice {
 		case "Credential Data":
-			credentialDataMenu(ctx, client, session, c)
+			credentialDataMenu(ctx, session, c)
 		case "Text Data":
-			textDataMenu(ctx, client)
+			textDataMenu(ctx, session, c)
 		case "Logout":
 			session.JwtToken = ""
 			fmt.Println("👋 Logging out...")
@@ -117,11 +121,11 @@ func mainMenu(ctx context.Context, client sensitive.SensitiveDataServiceClient, 
 	}
 }
 
-func credentialDataMenu(ctx context.Context, client sensitive.SensitiveDataServiceClient, session *Session, c *ClientApp) {
+func credentialDataMenu(ctx context.Context, session *Session, c *ClientApp) {
 	for {
 		menu := promptui.Select{
 			Label: "Credential Data Menu",
-			Items: []string{"Get List", "Add Login and Password", "Back"},
+			Items: []string{"Add Login and Password", "Get List", "Back"},
 		}
 		_, choice, err := menu.Run()
 		if err != nil {
@@ -144,9 +148,9 @@ func credentialDataMenu(ctx context.Context, client sensitive.SensitiveDataServi
 					for i, cred := range credList {
 						if err == nil {
 							fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-							fmt.Printf("%d. 🔐 %s\n", i+1, cred.ServiceName)
+							fmt.Printf("%d. %s\n", i+1, cred.ServiceName)
 							fmt.Printf("   Login:      %s\n", cred.Login)
-							fmt.Printf("   Password:   %s\n", string(cred.Password))
+							fmt.Printf("   Password 🔐:   %s\n", string(cred.Password))
 						}
 					}
 					fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
@@ -171,11 +175,11 @@ func credentialDataMenu(ctx context.Context, client sensitive.SensitiveDataServi
 	}
 }
 
-func textDataMenu(ctx context.Context, client sensitive.SensitiveDataServiceClient) {
+func textDataMenu(ctx context.Context, session *Session, c *ClientApp) {
 	for {
 		menu := promptui.Select{
-			Label: "Text Data Menu",
-			Items: []string{"Get List", "Get Text Data", "Add Text Data", "Back"},
+			Label: "Note Data Menu",
+			Items: []string{"Add Note", "Get List", "Back"},
 		}
 		_, choice, err := menu.Run()
 		if err != nil {
@@ -185,19 +189,37 @@ func textDataMenu(ctx context.Context, client sensitive.SensitiveDataServiceClie
 
 		switch choice {
 		case "Get List":
-			fmt.Println("📋 Fetching list of text data...")
-			// TODO: Реализовать получение списка текстовых данных
+			fmt.Println("📋 Fetching list of saved notes...")
 
-		case "Get Text Data":
-			dataID := promptInput("Enter text data ID or name")
-			fmt.Printf("🔍 Fetching text data: %s\n", dataID)
-			// TODO: Реализовать получение текстовых данных
+			noteList, err := c.GetNoteListHandler(ctx, session.JwtToken, session.CryptoKey)
 
-		case "Add Text Data":
-			name := promptInput("Name/Title")
-			//content := promptInput("Content")
-			fmt.Printf("➕ Adding new text data: %s\n", name)
-			// TODO: Реализовать добавление текстовых данных
+			if err != nil {
+				fmt.Printf("❌ Error: %v\n", err)
+			} else {
+				if len(noteList) == 0 {
+					fmt.Println("📭 No notes saved yet.")
+				} else {
+					for i, note := range noteList {
+						if err == nil {
+							fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+							fmt.Printf("%d. %s\n", i+1, note.ServiceName)
+							fmt.Printf("   Data 🔐: %s\n", note.Data)
+						}
+					}
+					fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
+				}
+			}
+
+		case "Add Note":
+			fmt.Printf("➕ Adding new note...\n")
+			label := promptInput("Label")
+			data := promptInput("Data")
+			err := c.AddNoteHandler(ctx, label, data, session.JwtToken, session.CryptoKey)
+			if err != nil {
+				fmt.Printf("❌ Error: %v\n", err)
+			} else {
+				fmt.Println("✅ Note added successfully")
+			}
 
 		case "Back":
 			return

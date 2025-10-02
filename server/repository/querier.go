@@ -11,10 +11,12 @@ import (
 type Querier interface {
 	CreateCredential(ctx context.Context, arg CreateCredentialParams) (Credential, error)
 	CreateSecretData(ctx context.Context, arg CreateSecretDataParams) (SecretDatum, error)
+	CreateTextData(ctx context.Context, arg CreateTextDataParams) (TextDatum, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int64) (User, error)
 	GetUserCredentials(ctx context.Context, userID int64) ([]GetUserCredentialsRow, error)
+	GetUserTextData(ctx context.Context, userID int64) ([]GetUserTextDataRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

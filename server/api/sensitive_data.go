@@ -115,16 +115,6 @@ func (s *SensitiveDataHandler) LoginUser(ctx context.Context, req *sensitive.Log
 	}, nil
 }
 
-func (s *SensitiveDataHandler) GetUserByID(ctx context.Context, ID int64) (*repository.User, error) {
-
-	dbUser, err := s.querier.GetUserByID(ctx, ID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &dbUser, nil
-}
-
 func (s *SensitiveDataHandler) AddCredentialData(ctx context.Context, req *sensitive.AddCredentialDataRequest) (*sensitive.AddCredentialDataResponse, error) {
 	userID, ok := ctx.Value("userID").(int64)
 	if !ok {
@@ -179,6 +169,62 @@ func (s *SensitiveDataHandler) GetCredentialDataList(ctx context.Context, req *s
 
 	return &sensitive.GetCredentialDataListResponse{
 		CredentialData: credentials,
+	}, nil
+
+}
+
+func (s *SensitiveDataHandler) AddTextData(ctx context.Context, req *sensitive.AddTextDataRequest) (*sensitive.AddTextDataResponse, error) {
+	userID, ok := ctx.Value("userID").(int64)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "userID not found in context")
+	}
+
+	secretData, err := s.querier.CreateSecretData(ctx, repository.CreateSecretDataParams{
+		UserID:      userID,
+		Type:        SecretDataTypeNote,
+		ServiceName: req.ServiceName,
+		CreatedAt:   time.Now(),
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to create secret data: %v", err)
+	}
+
+	_, err = s.querier.CreateTextData(ctx, repository.CreateTextDataParams{
+		SecretDataID:     secretData.ID,
+		ContentEncrypted: req.Data,
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to save note: %v", err)
+	}
+
+	return &sensitive.AddTextDataResponse{
+		SecretDataId: secretData.ID,
+	}, nil
+
+}
+
+func (s *SensitiveDataHandler) GetTextDataList(ctx context.Context, req *sensitive.GetTextDataListRequest) (*sensitive.GetTextDataListResponse, error) {
+	userID, ok := ctx.Value("userID").(int64)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "userID not found in context")
+	}
+
+	rows, err := s.querier.GetUserTextData(ctx, userID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get credentials: %v", err)
+	}
+
+	notes := make([]*sensitive.NoteData, 0, len(rows))
+	for _, row := range rows {
+
+		notes = append(notes, &sensitive.NoteData{
+			ServiceName: row.ServiceName,
+			Data:        row.ContentEncrypted,
+		})
+	}
+
+	return &sensitive.GetTextDataListResponse{
+		NoteData: notes,
 	}, nil
 
 }

@@ -45,3 +45,21 @@ FROM secret_data sd
          INNER JOIN credentials c ON c.secret_data_id = sd.id
 WHERE sd.user_id = $1 AND sd.type = 'credentials'
 ORDER BY sd.created_at DESC;
+
+
+-- name: CreateTextData :one
+INSERT INTO text_data (secret_data_id, content_encrypted)
+VALUES ($1, $2)
+    RETURNING id, secret_data_id, content_encrypted;
+
+-- name: GetUserTextData :many
+SELECT
+    sd.id,
+    sd.type,
+    sd.service_name,
+    sd.created_at,
+    t.content_encrypted
+FROM secret_data sd
+         INNER JOIN text_data t ON t.secret_data_id = sd.id
+WHERE sd.user_id = $1 AND sd.type = 'note'
+ORDER BY sd.created_at DESC;

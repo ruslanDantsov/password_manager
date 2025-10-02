@@ -65,6 +65,24 @@ func (q *Queries) CreateSecretData(ctx context.Context, arg CreateSecretDataPara
 	return i, err
 }
 
+const createTextData = `-- name: CreateTextData :one
+INSERT INTO text_data (secret_data_id, content_encrypted)
+VALUES ($1, $2)
+    RETURNING id, secret_data_id, content_encrypted
+`
+
+type CreateTextDataParams struct {
+	SecretDataID     int64
+	ContentEncrypted []byte
+}
+
+func (q *Queries) CreateTextData(ctx context.Context, arg CreateTextDataParams) (TextDatum, error) {
+	row := q.db.QueryRow(ctx, createTextData, arg.SecretDataID, arg.ContentEncrypted)
+	var i TextDatum
+	err := row.Scan(&i.ID, &i.SecretDataID, &i.ContentEncrypted)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
     email,
@@ -191,6 +209,53 @@ func (q *Queries) GetUserCredentials(ctx context.Context, userID int64) ([]GetUs
 			&i.CreatedAt,
 			&i.Login,
 			&i.PasswordEncrypted,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUserTextData = `-- name: GetUserTextData :many
+SELECT
+    sd.id,
+    sd.type,
+    sd.service_name,
+    sd.created_at,
+    t.content_encrypted
+FROM secret_data sd
+         INNER JOIN text_data t ON t.secret_data_id = sd.id
+WHERE sd.user_id = $1 AND sd.type = 'note'
+ORDER BY sd.created_at DESC
+`
+
+type GetUserTextDataRow struct {
+	ID               int64
+	Type             string
+	ServiceName      string
+	CreatedAt        time.Time
+	ContentEncrypted []byte
+}
+
+func (q *Queries) GetUserTextData(ctx context.Context, userID int64) ([]GetUserTextDataRow, error) {
+	rows, err := q.db.Query(ctx, getUserTextData, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUserTextDataRow
+	for rows.Next() {
+		var i GetUserTextDataRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.ServiceName,
+			&i.CreatedAt,
+			&i.ContentEncrypted,
 		); err != nil {
 			return nil, err
 		}
