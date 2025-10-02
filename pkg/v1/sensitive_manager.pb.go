@@ -718,6 +718,298 @@ func (x *GetTextDataListResponse) GetNoteData() []*NoteData {
 	return nil
 }
 
+type AddCardDataRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	ServiceName         string                 `protobuf:"bytes,10,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
+	CardholderName      string                 `protobuf:"bytes,20,opt,name=cardholder_name,json=cardholderName,proto3" json:"cardholder_name,omitempty"`
+	CardNumberEncrypted []byte                 `protobuf:"bytes,30,opt,name=card_number_encrypted,json=cardNumberEncrypted,proto3" json:"card_number_encrypted,omitempty"`
+	ExpiryMonth         int32                  `protobuf:"zigzag32,40,opt,name=expiry_month,json=expiryMonth,proto3" json:"expiry_month,omitempty"`
+	ExpiryYear          int32                  `protobuf:"zigzag32,50,opt,name=expiry_year,json=expiryYear,proto3" json:"expiry_year,omitempty"`
+	CvvEncrypted        []byte                 `protobuf:"bytes,60,opt,name=cvv_encrypted,json=cvvEncrypted,proto3" json:"cvv_encrypted,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *AddCardDataRequest) Reset() {
+	*x = AddCardDataRequest{}
+	mi := &file_sensitive_manager_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddCardDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddCardDataRequest) ProtoMessage() {}
+
+func (x *AddCardDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddCardDataRequest.ProtoReflect.Descriptor instead.
+func (*AddCardDataRequest) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *AddCardDataRequest) GetServiceName() string {
+	if x != nil {
+		return x.ServiceName
+	}
+	return ""
+}
+
+func (x *AddCardDataRequest) GetCardholderName() string {
+	if x != nil {
+		return x.CardholderName
+	}
+	return ""
+}
+
+func (x *AddCardDataRequest) GetCardNumberEncrypted() []byte {
+	if x != nil {
+		return x.CardNumberEncrypted
+	}
+	return nil
+}
+
+func (x *AddCardDataRequest) GetExpiryMonth() int32 {
+	if x != nil {
+		return x.ExpiryMonth
+	}
+	return 0
+}
+
+func (x *AddCardDataRequest) GetExpiryYear() int32 {
+	if x != nil {
+		return x.ExpiryYear
+	}
+	return 0
+}
+
+func (x *AddCardDataRequest) GetCvvEncrypted() []byte {
+	if x != nil {
+		return x.CvvEncrypted
+	}
+	return nil
+}
+
+type AddCardDataResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SecretDataId  int64                  `protobuf:"varint,10,opt,name=secret_data_id,json=secretDataId,proto3" json:"secret_data_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddCardDataResponse) Reset() {
+	*x = AddCardDataResponse{}
+	mi := &file_sensitive_manager_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddCardDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddCardDataResponse) ProtoMessage() {}
+
+func (x *AddCardDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddCardDataResponse.ProtoReflect.Descriptor instead.
+func (*AddCardDataResponse) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *AddCardDataResponse) GetSecretDataId() int64 {
+	if x != nil {
+		return x.SecretDataId
+	}
+	return 0
+}
+
+type GetCardDataListRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCardDataListRequest) Reset() {
+	*x = GetCardDataListRequest{}
+	mi := &file_sensitive_manager_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCardDataListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCardDataListRequest) ProtoMessage() {}
+
+func (x *GetCardDataListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCardDataListRequest.ProtoReflect.Descriptor instead.
+func (*GetCardDataListRequest) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{16}
+}
+
+type CardData struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	ServiceName         string                 `protobuf:"bytes,10,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
+	CardholderName      string                 `protobuf:"bytes,20,opt,name=cardholder_name,json=cardholderName,proto3" json:"cardholder_name,omitempty"`
+	CardNumberEncrypted []byte                 `protobuf:"bytes,30,opt,name=card_number_encrypted,json=cardNumberEncrypted,proto3" json:"card_number_encrypted,omitempty"`
+	ExpiryMonth         int32                  `protobuf:"zigzag32,40,opt,name=expiry_month,json=expiryMonth,proto3" json:"expiry_month,omitempty"`
+	ExpiryYear          int32                  `protobuf:"zigzag32,50,opt,name=expiry_year,json=expiryYear,proto3" json:"expiry_year,omitempty"`
+	CvvEncrypted        []byte                 `protobuf:"bytes,60,opt,name=cvv_encrypted,json=cvvEncrypted,proto3" json:"cvv_encrypted,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *CardData) Reset() {
+	*x = CardData{}
+	mi := &file_sensitive_manager_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CardData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CardData) ProtoMessage() {}
+
+func (x *CardData) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CardData.ProtoReflect.Descriptor instead.
+func (*CardData) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CardData) GetServiceName() string {
+	if x != nil {
+		return x.ServiceName
+	}
+	return ""
+}
+
+func (x *CardData) GetCardholderName() string {
+	if x != nil {
+		return x.CardholderName
+	}
+	return ""
+}
+
+func (x *CardData) GetCardNumberEncrypted() []byte {
+	if x != nil {
+		return x.CardNumberEncrypted
+	}
+	return nil
+}
+
+func (x *CardData) GetExpiryMonth() int32 {
+	if x != nil {
+		return x.ExpiryMonth
+	}
+	return 0
+}
+
+func (x *CardData) GetExpiryYear() int32 {
+	if x != nil {
+		return x.ExpiryYear
+	}
+	return 0
+}
+
+func (x *CardData) GetCvvEncrypted() []byte {
+	if x != nil {
+		return x.CvvEncrypted
+	}
+	return nil
+}
+
+type GetCardDataListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CardData      []*CardData            `protobuf:"bytes,10,rep,name=card_data,json=cardData,proto3" json:"card_data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCardDataListResponse) Reset() {
+	*x = GetCardDataListResponse{}
+	mi := &file_sensitive_manager_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCardDataListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCardDataListResponse) ProtoMessage() {}
+
+func (x *GetCardDataListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sensitive_manager_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCardDataListResponse.ProtoReflect.Descriptor instead.
+func (*GetCardDataListResponse) Descriptor() ([]byte, []int) {
+	return file_sensitive_manager_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *GetCardDataListResponse) GetCardData() []*CardData {
+	if x != nil {
+		return x.CardData
+	}
+	return nil
+}
+
 var File_sensitive_manager_proto protoreflect.FileDescriptor
 
 const file_sensitive_manager_proto_rawDesc = "" +
@@ -772,14 +1064,41 @@ const file_sensitive_manager_proto_rawDesc = "" +
 	"\x04data\x18\x14 \x01(\fR\x04data\"U\n" +
 	"\x17GetTextDataListResponse\x12:\n" +
 	"\tnote_data\x18\n" +
-	" \x03(\v2\x1d.sensitivemanager.v1.NoteDataR\bnoteData2\x9b\x05\n" +
+	" \x03(\v2\x1d.sensitivemanager.v1.NoteDataR\bnoteData\"\xfd\x01\n" +
+	"\x12AddCardDataRequest\x12!\n" +
+	"\fservice_name\x18\n" +
+	" \x01(\tR\vserviceName\x12'\n" +
+	"\x0fcardholder_name\x18\x14 \x01(\tR\x0ecardholderName\x122\n" +
+	"\x15card_number_encrypted\x18\x1e \x01(\fR\x13cardNumberEncrypted\x12!\n" +
+	"\fexpiry_month\x18( \x01(\x11R\vexpiryMonth\x12\x1f\n" +
+	"\vexpiry_year\x182 \x01(\x11R\n" +
+	"expiryYear\x12#\n" +
+	"\rcvv_encrypted\x18< \x01(\fR\fcvvEncrypted\";\n" +
+	"\x13AddCardDataResponse\x12$\n" +
+	"\x0esecret_data_id\x18\n" +
+	" \x01(\x03R\fsecretDataId\"\x18\n" +
+	"\x16GetCardDataListRequest\"\xf3\x01\n" +
+	"\bCardData\x12!\n" +
+	"\fservice_name\x18\n" +
+	" \x01(\tR\vserviceName\x12'\n" +
+	"\x0fcardholder_name\x18\x14 \x01(\tR\x0ecardholderName\x122\n" +
+	"\x15card_number_encrypted\x18\x1e \x01(\fR\x13cardNumberEncrypted\x12!\n" +
+	"\fexpiry_month\x18( \x01(\x11R\vexpiryMonth\x12\x1f\n" +
+	"\vexpiry_year\x182 \x01(\x11R\n" +
+	"expiryYear\x12#\n" +
+	"\rcvv_encrypted\x18< \x01(\fR\fcvvEncrypted\"U\n" +
+	"\x17GetCardDataListResponse\x12:\n" +
+	"\tcard_data\x18\n" +
+	" \x03(\v2\x1d.sensitivemanager.v1.CardDataR\bcardData2\xeb\x06\n" +
 	"\x14SensitiveDataService\x12c\n" +
 	"\fRegisterUser\x12(.sensitivemanager.v1.RegisterUserRequest\x1a).sensitivemanager.v1.RegisterUserResponse\x12Z\n" +
 	"\tLoginUser\x12%.sensitivemanager.v1.LoginUserRequest\x1a&.sensitivemanager.v1.LoginUserResponse\x12r\n" +
 	"\x11AddCredentialData\x12-.sensitivemanager.v1.AddCredentialDataRequest\x1a..sensitivemanager.v1.AddCredentialDataResponse\x12~\n" +
 	"\x15GetCredentialDataList\x121.sensitivemanager.v1.GetCredentialDataListRequest\x1a2.sensitivemanager.v1.GetCredentialDataListResponse\x12`\n" +
 	"\vAddTextData\x12'.sensitivemanager.v1.AddTextDataRequest\x1a(.sensitivemanager.v1.AddTextDataResponse\x12l\n" +
-	"\x0fGetTextDataList\x12+.sensitivemanager.v1.GetTextDataListRequest\x1a,.sensitivemanager.v1.GetTextDataListResponseBCZAgithub.com/ruslanDantsov/password_manager/pkg/sensitive;sensitiveb\x06proto3"
+	"\x0fGetTextDataList\x12+.sensitivemanager.v1.GetTextDataListRequest\x1a,.sensitivemanager.v1.GetTextDataListResponse\x12`\n" +
+	"\vAddCardData\x12'.sensitivemanager.v1.AddCardDataRequest\x1a(.sensitivemanager.v1.AddCardDataResponse\x12l\n" +
+	"\x0fGetCardDataList\x12+.sensitivemanager.v1.GetCardDataListRequest\x1a,.sensitivemanager.v1.GetCardDataListResponseBCZAgithub.com/ruslanDantsov/password_manager/pkg/sensitive;sensitiveb\x06proto3"
 
 var (
 	file_sensitive_manager_proto_rawDescOnce sync.Once
@@ -793,7 +1112,7 @@ func file_sensitive_manager_proto_rawDescGZIP() []byte {
 	return file_sensitive_manager_proto_rawDescData
 }
 
-var file_sensitive_manager_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_sensitive_manager_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_sensitive_manager_proto_goTypes = []any{
 	(*RegisterUserRequest)(nil),           // 0: sensitivemanager.v1.RegisterUserRequest
 	(*RegisterUserResponse)(nil),          // 1: sensitivemanager.v1.RegisterUserResponse
@@ -809,27 +1128,37 @@ var file_sensitive_manager_proto_goTypes = []any{
 	(*GetTextDataListRequest)(nil),        // 11: sensitivemanager.v1.GetTextDataListRequest
 	(*NoteData)(nil),                      // 12: sensitivemanager.v1.NoteData
 	(*GetTextDataListResponse)(nil),       // 13: sensitivemanager.v1.GetTextDataListResponse
+	(*AddCardDataRequest)(nil),            // 14: sensitivemanager.v1.AddCardDataRequest
+	(*AddCardDataResponse)(nil),           // 15: sensitivemanager.v1.AddCardDataResponse
+	(*GetCardDataListRequest)(nil),        // 16: sensitivemanager.v1.GetCardDataListRequest
+	(*CardData)(nil),                      // 17: sensitivemanager.v1.CardData
+	(*GetCardDataListResponse)(nil),       // 18: sensitivemanager.v1.GetCardDataListResponse
 }
 var file_sensitive_manager_proto_depIdxs = []int32{
 	7,  // 0: sensitivemanager.v1.GetCredentialDataListResponse.credential_data:type_name -> sensitivemanager.v1.CredentialData
 	12, // 1: sensitivemanager.v1.GetTextDataListResponse.note_data:type_name -> sensitivemanager.v1.NoteData
-	0,  // 2: sensitivemanager.v1.SensitiveDataService.RegisterUser:input_type -> sensitivemanager.v1.RegisterUserRequest
-	2,  // 3: sensitivemanager.v1.SensitiveDataService.LoginUser:input_type -> sensitivemanager.v1.LoginUserRequest
-	4,  // 4: sensitivemanager.v1.SensitiveDataService.AddCredentialData:input_type -> sensitivemanager.v1.AddCredentialDataRequest
-	6,  // 5: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:input_type -> sensitivemanager.v1.GetCredentialDataListRequest
-	9,  // 6: sensitivemanager.v1.SensitiveDataService.AddTextData:input_type -> sensitivemanager.v1.AddTextDataRequest
-	11, // 7: sensitivemanager.v1.SensitiveDataService.GetTextDataList:input_type -> sensitivemanager.v1.GetTextDataListRequest
-	1,  // 8: sensitivemanager.v1.SensitiveDataService.RegisterUser:output_type -> sensitivemanager.v1.RegisterUserResponse
-	3,  // 9: sensitivemanager.v1.SensitiveDataService.LoginUser:output_type -> sensitivemanager.v1.LoginUserResponse
-	5,  // 10: sensitivemanager.v1.SensitiveDataService.AddCredentialData:output_type -> sensitivemanager.v1.AddCredentialDataResponse
-	8,  // 11: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:output_type -> sensitivemanager.v1.GetCredentialDataListResponse
-	10, // 12: sensitivemanager.v1.SensitiveDataService.AddTextData:output_type -> sensitivemanager.v1.AddTextDataResponse
-	13, // 13: sensitivemanager.v1.SensitiveDataService.GetTextDataList:output_type -> sensitivemanager.v1.GetTextDataListResponse
-	8,  // [8:14] is the sub-list for method output_type
-	2,  // [2:8] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	17, // 2: sensitivemanager.v1.GetCardDataListResponse.card_data:type_name -> sensitivemanager.v1.CardData
+	0,  // 3: sensitivemanager.v1.SensitiveDataService.RegisterUser:input_type -> sensitivemanager.v1.RegisterUserRequest
+	2,  // 4: sensitivemanager.v1.SensitiveDataService.LoginUser:input_type -> sensitivemanager.v1.LoginUserRequest
+	4,  // 5: sensitivemanager.v1.SensitiveDataService.AddCredentialData:input_type -> sensitivemanager.v1.AddCredentialDataRequest
+	6,  // 6: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:input_type -> sensitivemanager.v1.GetCredentialDataListRequest
+	9,  // 7: sensitivemanager.v1.SensitiveDataService.AddTextData:input_type -> sensitivemanager.v1.AddTextDataRequest
+	11, // 8: sensitivemanager.v1.SensitiveDataService.GetTextDataList:input_type -> sensitivemanager.v1.GetTextDataListRequest
+	14, // 9: sensitivemanager.v1.SensitiveDataService.AddCardData:input_type -> sensitivemanager.v1.AddCardDataRequest
+	16, // 10: sensitivemanager.v1.SensitiveDataService.GetCardDataList:input_type -> sensitivemanager.v1.GetCardDataListRequest
+	1,  // 11: sensitivemanager.v1.SensitiveDataService.RegisterUser:output_type -> sensitivemanager.v1.RegisterUserResponse
+	3,  // 12: sensitivemanager.v1.SensitiveDataService.LoginUser:output_type -> sensitivemanager.v1.LoginUserResponse
+	5,  // 13: sensitivemanager.v1.SensitiveDataService.AddCredentialData:output_type -> sensitivemanager.v1.AddCredentialDataResponse
+	8,  // 14: sensitivemanager.v1.SensitiveDataService.GetCredentialDataList:output_type -> sensitivemanager.v1.GetCredentialDataListResponse
+	10, // 15: sensitivemanager.v1.SensitiveDataService.AddTextData:output_type -> sensitivemanager.v1.AddTextDataResponse
+	13, // 16: sensitivemanager.v1.SensitiveDataService.GetTextDataList:output_type -> sensitivemanager.v1.GetTextDataListResponse
+	15, // 17: sensitivemanager.v1.SensitiveDataService.AddCardData:output_type -> sensitivemanager.v1.AddCardDataResponse
+	18, // 18: sensitivemanager.v1.SensitiveDataService.GetCardDataList:output_type -> sensitivemanager.v1.GetCardDataListResponse
+	11, // [11:19] is the sub-list for method output_type
+	3,  // [3:11] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_sensitive_manager_proto_init() }
@@ -843,7 +1172,7 @@ func file_sensitive_manager_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sensitive_manager_proto_rawDesc), len(file_sensitive_manager_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

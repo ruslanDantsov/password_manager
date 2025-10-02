@@ -75,6 +75,35 @@ message GetTextDataListResponse {
   repeated NoteData note_data = 10;
 }
 
+message AddCardDataRequest {
+  string service_name = 10;
+  string cardholder_name = 20;
+  bytes card_number_encrypted = 30;
+  sint32 expiry_month = 40;
+  sint32 expiry_year = 50;
+  bytes cvv_encrypted = 60;
+}
+
+message AddCardDataResponse {
+  int64 secret_data_id = 10;
+}
+
+message GetCardDataListRequest {
+}
+
+message CardData {
+  string service_name = 10;
+  string cardholder_name = 20;
+  bytes card_number_encrypted = 30;
+  sint32 expiry_month = 40;
+  sint32 expiry_year = 50;
+  bytes cvv_encrypted = 60;
+}
+
+message GetCardDataListResponse {
+  repeated CardData card_data = 10;
+}
+
 service SensitiveDataService {
   rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
@@ -84,4 +113,7 @@ service SensitiveDataService {
 
   rpc AddTextData(AddTextDataRequest) returns (AddTextDataResponse);
   rpc GetTextDataList(GetTextDataListRequest) returns (GetTextDataListResponse);
+
+  rpc AddCardData(AddCardDataRequest) returns (AddCardDataResponse);
+  rpc GetCardDataList(GetCardDataListRequest) returns (GetCardDataListResponse);
 }

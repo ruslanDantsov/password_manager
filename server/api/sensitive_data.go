@@ -211,7 +211,7 @@ func (s *SensitiveDataHandler) GetTextDataList(ctx context.Context, req *sensiti
 
 	rows, err := s.querier.GetUserTextData(ctx, userID)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to get credentials: %v", err)
+		return nil, status.Errorf(codes.Internal, "failed to get notes: %v", err)
 	}
 
 	notes := make([]*sensitive.NoteData, 0, len(rows))
@@ -225,6 +225,71 @@ func (s *SensitiveDataHandler) GetTextDataList(ctx context.Context, req *sensiti
 
 	return &sensitive.GetTextDataListResponse{
 		NoteData: notes,
+	}, nil
+
+}
+
+func (s *SensitiveDataHandler) AddCardData(ctx context.Context, req *sensitive.AddCardDataRequest) (*sensitive.AddCardDataResponse, error) {
+	userID, ok := ctx.Value("userID").(int64)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "userID not found in context")
+	}
+
+	secretData, err := s.querier.CreateSecretData(ctx, repository.CreateSecretDataParams{
+		UserID:      userID,
+		Type:        SecretDataTypeCard,
+		ServiceName: req.ServiceName,
+		CreatedAt:   time.Now(),
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to create secret data: %v", err)
+	}
+
+	_, err = s.querier.CreateBankCard(ctx, repository.CreateBankCardParams{
+		SecretDataID:        secretData.ID,
+		CardholderName:      req.CardholderName,
+		CardNumberEncrypted: req.CardNumberEncrypted,
+		ExpiryMonth:         req.ExpiryMonth,
+		ExpiryYear:          req.ExpiryYear,
+		CvvEncrypted:        req.CvvEncrypted,
+	})
+
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to save bank card: %v", err)
+	}
+
+	return &sensitive.AddCardDataResponse{
+		SecretDataId: secretData.ID,
+	}, nil
+
+}
+
+func (s *SensitiveDataHandler) GetCardDataList(ctx context.Context, req *sensitive.GetCardDataListRequest) (*sensitive.GetCardDataListResponse, error) {
+	userID, ok := ctx.Value("userID").(int64)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "userID not found in context")
+	}
+
+	rows, err := s.querier.GetUserBankCards(ctx, userID)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to get bank cards: %v", err)
+	}
+
+	cards := make([]*sensitive.CardData, 0, len(rows))
+	for _, row := range rows {
+
+		cards = append(cards, &sensitive.CardData{
+			ServiceName:         row.ServiceName,
+			CardholderName:      row.CardholderName,
+			CardNumberEncrypted: row.CardNumberEncrypted,
+			ExpiryMonth:         row.ExpiryMonth,
+			ExpiryYear:          row.ExpiryYear,
+			CvvEncrypted:        row.CvvEncrypted,
+		})
+	}
+
+	return &sensitive.GetCardDataListResponse{
+		CardData: cards,
 	}, nil
 
 }

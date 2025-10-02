@@ -12,18 +12,10 @@ type BankCard struct {
 	ID                  int64
 	SecretDataID        int64
 	CardholderName      string
-	CardNumberEncrypted string
-	ExpiryMonth         int16
-	ExpiryYear          int16
-	CvvEncrypted        string
-}
-
-type BinaryDatum struct {
-	ID            int64
-	SecretDataID  int64
-	Filename      *string
-	MimeType      *string
-	DataEncrypted []byte
+	CardNumberEncrypted []byte
+	ExpiryMonth         int32
+	ExpiryYear          int32
+	CvvEncrypted        []byte
 }
 
 type Credential struct {

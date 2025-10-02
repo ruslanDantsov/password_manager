@@ -8,6 +8,7 @@ import (
 	sensitive "github.com/ruslanDantsov/password-manager/pkg/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"strconv"
 )
 
 type Session struct {
@@ -24,6 +25,17 @@ type ClientApp struct {
 	GetCredListHandler      func(ctx context.Context, authToken string, cryptoKey []byte) ([]*sensitive.CredentialData, error)
 	AddNoteHandler          func(ctx context.Context, serviceName, note, authToken string, cryptoKey []byte) error
 	GetNoteListHandler      func(ctx context.Context, authToken string, cryptoKey []byte) ([]*sensitive.NoteData, error)
+	AddCardHandler          func(
+		ctx context.Context,
+		serviceName string,
+		cardholderName string,
+		cardNumberEncrypted string,
+		expiryMonth int32,
+		expiryYear int32,
+		cvvEncrypted string,
+		authToken string,
+		cryptoKey []byte) error
+	GetCardListHandler func(ctx context.Context, authToken string, cryptoKey []byte) ([]*sensitive.CardData, error)
 }
 
 func NewClientApp(host string) (*ClientApp, error) {
@@ -42,6 +54,8 @@ func NewClientApp(host string) (*ClientApp, error) {
 		GetCredListHandler:      api.NewGetCredListHandler(sensitiveDataClient),
 		AddNoteHandler:          api.NewAddNoteHandler(sensitiveDataClient),
 		GetNoteListHandler:      api.NewGetNoteListHandler(sensitiveDataClient),
+		AddCardHandler:          api.NewAddCardHandler(sensitiveDataClient),
+		GetCardListHandler:      api.NewGetCardListHandler(sensitiveDataClient),
 	}, nil
 }
 
@@ -100,7 +114,7 @@ func mainMenu(ctx context.Context, client sensitive.SensitiveDataServiceClient, 
 	for {
 		menu := promptui.Select{
 			Label: "Main Menu",
-			Items: []string{"Credential Data", "Text Data", "Logout"},
+			Items: []string{"Credential Data", "Text Data", "Bank Card", "Logout"},
 		}
 		_, choice, err := menu.Run()
 		if err != nil {
@@ -113,6 +127,8 @@ func mainMenu(ctx context.Context, client sensitive.SensitiveDataServiceClient, 
 			credentialDataMenu(ctx, session, c)
 		case "Text Data":
 			textDataMenu(ctx, session, c)
+		case "Bank Card":
+			bankCardMenu(ctx, session, c)
 		case "Logout":
 			session.JwtToken = ""
 			fmt.Println("👋 Logging out...")
@@ -227,6 +243,75 @@ func textDataMenu(ctx context.Context, session *Session, c *ClientApp) {
 	}
 }
 
+func bankCardMenu(ctx context.Context, session *Session, c *ClientApp) {
+	for {
+		menu := promptui.Select{
+			Label: "Bank Card Menu",
+			Items: []string{"Add Bank Card", "Get List", "Back"},
+		}
+		_, choice, err := menu.Run()
+		if err != nil {
+			fmt.Printf("Prompt failed %v\n", err)
+			return
+		}
+
+		switch choice {
+		case "Get List":
+			fmt.Println("📋 Fetching list of saved bank cards...")
+
+			cardList, err := c.GetCardListHandler(ctx, session.JwtToken, session.CryptoKey)
+
+			if err != nil {
+				fmt.Printf("❌ Error: %v\n", err)
+			} else {
+				if len(cardList) == 0 {
+					fmt.Println("📭 No bank cards saved yet.")
+				} else {
+					for i, card := range cardList {
+						if err == nil {
+							fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+							fmt.Printf("%d. %s\n", i+1, card.ServiceName)
+							fmt.Printf("   Card Holder Name:      %s\n", card.CardholderName)
+							fmt.Printf("   Card Number 🔐:   %s\n", string(card.CardNumberEncrypted))
+							fmt.Printf("   Card Expiry Month:      %v\n", card.ExpiryMonth)
+							fmt.Printf("   Card Expiry Year:      %v\n", card.ExpiryYear)
+							fmt.Printf("   Card CVV 🔐:   %s\n", string(card.CvvEncrypted))
+						}
+					}
+					fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
+				}
+			}
+
+		case "Add Bank Card":
+			fmt.Printf("➕ Adding new bank card...\n")
+			cardName := promptInput("Card Name (e.g., Visa, MasterCard)")
+			cardholderName := promptInput("Cardholder Name")
+			cardNumber := promptInput("Card Number")
+			expiryMonth := promptInputInt32("Expiry Month (MM)")
+			expiryYear := promptInputInt32("Expiry Year (YY)")
+			cvv := promptPassword("CVV")
+
+			err := c.AddCardHandler(ctx,
+				cardName,
+				cardholderName,
+				cardNumber,
+				expiryMonth,
+				expiryYear,
+				cvv,
+				session.JwtToken,
+				session.CryptoKey)
+			if err != nil {
+				fmt.Printf("❌ Error: %v\n", err)
+			} else {
+				fmt.Println("✅ Bank card added successfully")
+			}
+
+		case "Back":
+			return
+		}
+	}
+}
+
 func promptInput(label string) string {
 	prompt := promptui.Prompt{
 		Label: label,
@@ -250,4 +335,31 @@ func promptPassword(label string) string {
 		return ""
 	}
 	return result
+}
+
+func promptInputInt32(label string) int32 {
+	prompt := promptui.Prompt{
+		Label: label,
+		Validate: func(input string) error {
+			_, err := strconv.Atoi(input)
+			if err != nil {
+				return fmt.Errorf("Введите корректное целое число")
+			}
+			return nil
+		},
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return 0
+	}
+
+	value, err := strconv.Atoi(result)
+	if err != nil {
+		fmt.Printf("Conversion failed %v\n", err)
+		return 0
+	}
+
+	return int32(value)
 }

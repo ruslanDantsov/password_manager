@@ -25,6 +25,8 @@ const (
 	SensitiveDataService_GetCredentialDataList_FullMethodName = "/sensitivemanager.v1.SensitiveDataService/GetCredentialDataList"
 	SensitiveDataService_AddTextData_FullMethodName           = "/sensitivemanager.v1.SensitiveDataService/AddTextData"
 	SensitiveDataService_GetTextDataList_FullMethodName       = "/sensitivemanager.v1.SensitiveDataService/GetTextDataList"
+	SensitiveDataService_AddCardData_FullMethodName           = "/sensitivemanager.v1.SensitiveDataService/AddCardData"
+	SensitiveDataService_GetCardDataList_FullMethodName       = "/sensitivemanager.v1.SensitiveDataService/GetCardDataList"
 )
 
 // SensitiveDataServiceClient is the client API for SensitiveDataService service.
@@ -37,6 +39,8 @@ type SensitiveDataServiceClient interface {
 	GetCredentialDataList(ctx context.Context, in *GetCredentialDataListRequest, opts ...grpc.CallOption) (*GetCredentialDataListResponse, error)
 	AddTextData(ctx context.Context, in *AddTextDataRequest, opts ...grpc.CallOption) (*AddTextDataResponse, error)
 	GetTextDataList(ctx context.Context, in *GetTextDataListRequest, opts ...grpc.CallOption) (*GetTextDataListResponse, error)
+	AddCardData(ctx context.Context, in *AddCardDataRequest, opts ...grpc.CallOption) (*AddCardDataResponse, error)
+	GetCardDataList(ctx context.Context, in *GetCardDataListRequest, opts ...grpc.CallOption) (*GetCardDataListResponse, error)
 }
 
 type sensitiveDataServiceClient struct {
@@ -107,6 +111,26 @@ func (c *sensitiveDataServiceClient) GetTextDataList(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *sensitiveDataServiceClient) AddCardData(ctx context.Context, in *AddCardDataRequest, opts ...grpc.CallOption) (*AddCardDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddCardDataResponse)
+	err := c.cc.Invoke(ctx, SensitiveDataService_AddCardData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sensitiveDataServiceClient) GetCardDataList(ctx context.Context, in *GetCardDataListRequest, opts ...grpc.CallOption) (*GetCardDataListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCardDataListResponse)
+	err := c.cc.Invoke(ctx, SensitiveDataService_GetCardDataList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SensitiveDataServiceServer is the server API for SensitiveDataService service.
 // All implementations must embed UnimplementedSensitiveDataServiceServer
 // for forward compatibility.
@@ -117,6 +141,8 @@ type SensitiveDataServiceServer interface {
 	GetCredentialDataList(context.Context, *GetCredentialDataListRequest) (*GetCredentialDataListResponse, error)
 	AddTextData(context.Context, *AddTextDataRequest) (*AddTextDataResponse, error)
 	GetTextDataList(context.Context, *GetTextDataListRequest) (*GetTextDataListResponse, error)
+	AddCardData(context.Context, *AddCardDataRequest) (*AddCardDataResponse, error)
+	GetCardDataList(context.Context, *GetCardDataListRequest) (*GetCardDataListResponse, error)
 	mustEmbedUnimplementedSensitiveDataServiceServer()
 }
 
@@ -144,6 +170,12 @@ func (UnimplementedSensitiveDataServiceServer) AddTextData(context.Context, *Add
 }
 func (UnimplementedSensitiveDataServiceServer) GetTextDataList(context.Context, *GetTextDataListRequest) (*GetTextDataListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTextDataList not implemented")
+}
+func (UnimplementedSensitiveDataServiceServer) AddCardData(context.Context, *AddCardDataRequest) (*AddCardDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddCardData not implemented")
+}
+func (UnimplementedSensitiveDataServiceServer) GetCardDataList(context.Context, *GetCardDataListRequest) (*GetCardDataListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCardDataList not implemented")
 }
 func (UnimplementedSensitiveDataServiceServer) mustEmbedUnimplementedSensitiveDataServiceServer() {}
 func (UnimplementedSensitiveDataServiceServer) testEmbeddedByValue()                              {}
@@ -274,6 +306,42 @@ func _SensitiveDataService_GetTextDataList_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SensitiveDataService_AddCardData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCardDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SensitiveDataServiceServer).AddCardData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SensitiveDataService_AddCardData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SensitiveDataServiceServer).AddCardData(ctx, req.(*AddCardDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SensitiveDataService_GetCardDataList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCardDataListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SensitiveDataServiceServer).GetCardDataList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SensitiveDataService_GetCardDataList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SensitiveDataServiceServer).GetCardDataList(ctx, req.(*GetCardDataListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SensitiveDataService_ServiceDesc is the grpc.ServiceDesc for SensitiveDataService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +372,14 @@ var SensitiveDataService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTextDataList",
 			Handler:    _SensitiveDataService_GetTextDataList_Handler,
+		},
+		{
+			MethodName: "AddCardData",
+			Handler:    _SensitiveDataService_AddCardData_Handler,
+		},
+		{
+			MethodName: "GetCardDataList",
+			Handler:    _SensitiveDataService_GetCardDataList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

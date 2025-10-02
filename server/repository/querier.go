@@ -9,10 +9,12 @@ import (
 )
 
 type Querier interface {
+	CreateBankCard(ctx context.Context, arg CreateBankCardParams) (BankCard, error)
 	CreateCredential(ctx context.Context, arg CreateCredentialParams) (Credential, error)
 	CreateSecretData(ctx context.Context, arg CreateSecretDataParams) (SecretDatum, error)
 	CreateTextData(ctx context.Context, arg CreateTextDataParams) (TextDatum, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	GetUserBankCards(ctx context.Context, userID int64) ([]GetUserBankCardsRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int64) (User, error)
 	GetUserCredentials(ctx context.Context, userID int64) ([]GetUserCredentialsRow, error)

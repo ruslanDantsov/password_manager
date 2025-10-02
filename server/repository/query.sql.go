@@ -10,6 +10,43 @@ import (
 	"time"
 )
 
+const createBankCard = `-- name: CreateBankCard :one
+INSERT INTO bank_cards (secret_data_id, cardholder_name, card_number_encrypted, expiry_month, expiry_year, cvv_encrypted)
+VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING id, secret_data_id, cardholder_name, card_number_encrypted, expiry_month, expiry_year, cvv_encrypted
+`
+
+type CreateBankCardParams struct {
+	SecretDataID        int64
+	CardholderName      string
+	CardNumberEncrypted []byte
+	ExpiryMonth         int32
+	ExpiryYear          int32
+	CvvEncrypted        []byte
+}
+
+func (q *Queries) CreateBankCard(ctx context.Context, arg CreateBankCardParams) (BankCard, error) {
+	row := q.db.QueryRow(ctx, createBankCard,
+		arg.SecretDataID,
+		arg.CardholderName,
+		arg.CardNumberEncrypted,
+		arg.ExpiryMonth,
+		arg.ExpiryYear,
+		arg.CvvEncrypted,
+	)
+	var i BankCard
+	err := row.Scan(
+		&i.ID,
+		&i.SecretDataID,
+		&i.CardholderName,
+		&i.CardNumberEncrypted,
+		&i.ExpiryMonth,
+		&i.ExpiryYear,
+		&i.CvvEncrypted,
+	)
+	return i, err
+}
+
 const createCredential = `-- name: CreateCredential :one
 INSERT INTO credentials (secret_data_id, login, password_encrypted)
 VALUES ($1, $2, $3)
@@ -128,6 +165,65 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const getUserBankCards = `-- name: GetUserBankCards :many
+SELECT
+    sd.id,
+    sd.type,
+    sd.service_name,
+    sd.created_at,
+    c.cardholder_name,
+    c.card_number_encrypted,
+    c.expiry_month,
+    c.expiry_year,
+    c.cvv_encrypted
+FROM secret_data sd
+         INNER JOIN bank_cards c ON c.secret_data_id = sd.id
+WHERE sd.user_id = $1 AND sd.type = 'card'
+ORDER BY sd.created_at DESC
+`
+
+type GetUserBankCardsRow struct {
+	ID                  int64
+	Type                string
+	ServiceName         string
+	CreatedAt           time.Time
+	CardholderName      string
+	CardNumberEncrypted []byte
+	ExpiryMonth         int32
+	ExpiryYear          int32
+	CvvEncrypted        []byte
+}
+
+func (q *Queries) GetUserBankCards(ctx context.Context, userID int64) ([]GetUserBankCardsRow, error) {
+	rows, err := q.db.Query(ctx, getUserBankCards, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUserBankCardsRow
+	for rows.Next() {
+		var i GetUserBankCardsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.ServiceName,
+			&i.CreatedAt,
+			&i.CardholderName,
+			&i.CardNumberEncrypted,
+			&i.ExpiryMonth,
+			&i.ExpiryYear,
+			&i.CvvEncrypted,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
