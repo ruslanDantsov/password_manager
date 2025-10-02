@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package sensitivemanager.v1;
+
+option go_package = "github.com/ruslanDantsov/password_manager/pkg/sensitive;sensitive";
+
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+message RegisterUserRequest {
+  string email = 10 [(validate.rules).string = {email: true, min_len: 4, max_len: 100}];
+  string password = 20 [(validate.rules).string = {min_len: 4, max_len: 128}];
+  string display_name = 30 [(validate.rules).string = {min_len: 1, max_len: 50}];
+}
+
+message RegisterUserResponse {
+  int64 user_id = 10;
+}
+
+message LoginUserRequest {
+  string email = 10;
+  string password = 20;
+}
+
+message LoginUserResponse {
+  int64 user_id = 10;
+  string access_token = 20;
+  bytes salt = 30;
+  bytes encrypted_data_key = 40;
+}
+
+message AddCredentialDataRequest {
+  string service_name = 10;
+  string login = 20;
+  bytes password = 30;
+}
+
+message AddCredentialDataResponse {
+  int64 secret_data_id = 10;
+}
+
+message GetCredentialDataListRequest {
+
+}
+
+message CredentialData {
+  string service_name = 10;
+  string login = 20;
+  bytes password = 30;
+}
+
+message GetCredentialDataListResponse {
+  repeated CredentialData credential_data = 10;
+}
+
+message AddTextDataRequest {
+  string service_name = 10;
+  bytes data = 20;
+}
+
+message AddTextDataResponse {
+  int64 secret_data_id = 10;
+}
+
+message GetTextDataListRequest {
+
+}
+
+message NoteData {
+  string service_name = 10;
+  bytes data = 20;
+}
+
+message GetTextDataListResponse {
+  repeated NoteData note_data = 10;
+}
+
+message AddCardDataRequest {
+  string service_name = 10;
+  string cardholder_name = 20;
+  bytes card_number_encrypted = 30;
+  sint32 expiry_month = 40;
+  sint32 expiry_year = 50;
+  bytes cvv_encrypted = 60;
+}
+
+message AddCardDataResponse {
+  int64 secret_data_id = 10;
+}
+
+message GetCardDataListRequest {
+}
+
+message CardData {
+  string service_name = 10;
+  string cardholder_name = 20;
+  bytes card_number_encrypted = 30;
+  sint32 expiry_month = 40;
+  sint32 expiry_year = 50;
+  bytes cvv_encrypted = 60;
+}
+
+message GetCardDataListResponse {
+  repeated CardData card_data = 10;
+}
+
+service SensitiveDataService {
+  rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
+
+  rpc AddCredentialData(AddCredentialDataRequest) returns (AddCredentialDataResponse);
+  rpc GetCredentialDataList(GetCredentialDataListRequest) returns (GetCredentialDataListResponse);
+
+  rpc AddTextData(AddTextDataRequest) returns (AddTextDataResponse);
+  rpc GetTextDataList(GetTextDataListRequest) returns (GetTextDataListResponse);
+
+  rpc AddCardData(AddCardDataRequest) returns (AddCardDataResponse);
+  rpc GetCardDataList(GetCardDataListRequest) returns (GetCardDataListResponse);
+}
