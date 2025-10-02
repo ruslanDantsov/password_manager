@@ -7,6 +7,7 @@
 package sensitive
 
 import (
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
@@ -1014,12 +1015,13 @@ var File_sensitive_manager_proto protoreflect.FileDescriptor
 
 const file_sensitive_manager_proto_rawDesc = "" +
 	"\n" +
-	"\x17sensitive_manager.proto\x12\x13sensitivemanager.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"j\n" +
-	"\x13RegisterUserRequest\x12\x14\n" +
+	"\x17sensitive_manager.proto\x12\x13sensitivemanager.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\"\x8e\x01\n" +
+	"\x13RegisterUserRequest\x12!\n" +
 	"\x05email\x18\n" +
-	" \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x14 \x01(\tR\bpassword\x12!\n" +
-	"\fdisplay_name\x18\x1e \x01(\tR\vdisplayName\"/\n" +
+	" \x01(\tB\v\xfaB\br\x06\x10\x04\x18d`\x01R\x05email\x12&\n" +
+	"\bpassword\x18\x14 \x01(\tB\n" +
+	"\xfaB\ar\x05\x10\x04\x18\x80\x01R\bpassword\x12,\n" +
+	"\fdisplay_name\x18\x1e \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\vdisplayName\"/\n" +
 	"\x14RegisterUserResponse\x12\x17\n" +
 	"\auser_id\x18\n" +
 	" \x01(\x03R\x06userId\"D\n" +

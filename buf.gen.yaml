@@ -8,3 +8,8 @@ plugins:
     out: pkg/v1
     opt:
       - paths=source_relative
+  - local: protoc-gen-validate
+    out: pkg/v1
+    opt:
+      - lang=go
+      - paths=source_relative

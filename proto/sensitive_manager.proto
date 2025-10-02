@@ -5,12 +5,12 @@ package sensitivemanager.v1;
 option go_package = "github.com/ruslanDantsov/password_manager/pkg/sensitive;sensitive";
 
 import "google/protobuf/timestamp.proto";
-
+import "validate/validate.proto";
 
 message RegisterUserRequest {
-  string email = 10;
-  string password = 20;
-  string display_name = 30;
+  string email = 10 [(validate.rules).string = {email: true, min_len: 4, max_len: 100}];
+  string password = 20 [(validate.rules).string = {min_len: 4, max_len: 128}];
+  string display_name = 30 [(validate.rules).string = {min_len: 1, max_len: 50}];
 }
 
 message RegisterUserResponse {

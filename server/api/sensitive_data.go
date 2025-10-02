@@ -36,15 +36,8 @@ func NewSensitiveDataHandler(querier repository.Querier) *SensitiveDataHandler {
 
 func (s *SensitiveDataHandler) RegisterUser(ctx context.Context, req *sensitive.RegisterUserRequest) (*sensitive.RegisterUserResponse, error) {
 	fmt.Println("Start logic for user registration")
-
-	if req.Email == "" || req.Password == "" {
-		fmt.Println("error: email and password are required")
-		return nil, status.Error(codes.InvalidArgument, "email and password are required")
-	}
-
-	if len(req.Password) < 4 {
-		fmt.Println("password must be at least 4 characters long")
-		return nil, status.Error(codes.InvalidArgument, "password must be at least 4 characters long")
+	if err := req.ValidateAll(); err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
